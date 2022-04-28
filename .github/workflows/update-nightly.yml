@@ -160,16 +160,16 @@ jobs:
           do_tar() {
             output=$1
             sourcedir=$2
-            _output=$(realpath $output); (cd $sourcedir; shopt -s nullglob dotglob; tar cvf $_output *)
+            _output=$(realpath $output); (cd $sourcedir; shopt -s nullglob dotglob; tar czvf $_output *)
           }
-          do_tar arch_bundle/_original_artifacts.tar ori_artifacts
+          do_tar arch_bundle/_original_artifacts.tar.gz ori_artifacts
 
           processArch() {
             arch=$1
             cp -r ori_artifacts/*-latest_$arch arch_artifacts/$arch
             (cd arch_artifacts/$arch; find . -type f -name "*.tar" -exec mv {} . \;)
             find $(realpath "arch_artifacts/$arch") -type f -name "*.tar" -exec bash -c "cd arch_extracted/$arch; tar xvf {}" \;
-            do_tar arch_bundle/$arch.tar arch_extracted/$arch
+            do_tar arch_bundle/$arch.tar.gz arch_extracted/$arch
           }
           processArch i686-mingw32
           processArch x86_64-mingw64
